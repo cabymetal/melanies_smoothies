@@ -24,14 +24,14 @@ ingredients_list = st.multiselect(
 table = st.dataframe(data=ingredients_list, use_container_width=True)
 
 if ingredients_list:
-
+    ingredients_string = ''
+    ingredients_string = ' - '.join(ingredients_list)
     for fruit in ingredients_list:
         
         fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+        st.subheader(f'{fruit} nutritional info')
         fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
         
-        ingredients_string = ''
-        ingredients_string = ' - '.join(ingredients_list)
         st.write(ingredients_string)
         my_insert_stmt = """ insert into smoothies.public.orders(ingredients, NAME_ON_ORDER)
                 values """ +  f"('{ingredients_string}', '{smoothie_name}')"
