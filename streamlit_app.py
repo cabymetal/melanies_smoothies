@@ -23,25 +23,24 @@ ingredients_list = st.multiselect(
 
 table = st.dataframe(data=ingredients_list, use_container_width=True)
 
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
-# st.text(fruityvice_response.json())
-fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
-
 if ingredients_list:
-    #st.write(ingredients_list)
-    #st.text(ingredients_list)
 
-    ingredients_string = ''
-    ingredients_string = ' - '.join(ingredients_list)
-    st.write(ingredients_string)
-    my_insert_stmt = """ insert into smoothies.public.orders(ingredients, NAME_ON_ORDER)
-            values """ +  f"('{ingredients_string}', '{smoothie_name}')"
-
-    #st.write(my_insert_stmt)
-
-    time_to_insert = st.button('Submit Order')
-    
-    if time_to_insert:
-        session.sql(my_insert_stmt).collect()
-        st.success(f'Your Smoothie is ordered! {smoothie_name}', icon="✅")
+    for fruit in ingredients_list:
+        
+        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+        fv_df = st.dataframe(data=fruityvice_response.json(), use_container_width=True)
+        
+        ingredients_string = ''
+        ingredients_string = ' - '.join(ingredients_list)
+        st.write(ingredients_string)
+        my_insert_stmt = """ insert into smoothies.public.orders(ingredients, NAME_ON_ORDER)
+                values """ +  f"('{ingredients_string}', '{smoothie_name}')"
+        
+        #st.write(my_insert_stmt)
+        
+        time_to_insert = st.button('Submit Order')
+        
+        if time_to_insert:
+            session.sql(my_insert_stmt).collect()
+            st.success(f'Your Smoothie is ordered! {smoothie_name}', icon="✅")
 
