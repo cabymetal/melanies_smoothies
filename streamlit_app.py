@@ -27,7 +27,7 @@ ingredients_list = st.multiselect(
     my_dataframe,
     max_selections=5)
 
-table = st.dataframe(data=ingredients_list, use_container_width=True)
+# table = st.dataframe(data=ingredients_list, use_container_width=True)
 
 if ingredients_list:
     ingredients_string = ''
@@ -44,11 +44,10 @@ if ingredients_list:
         my_insert_stmt = """ insert into smoothies.public.orders(ingredients, NAME_ON_ORDER)
                 values """ +  f"('{ingredients_string}', '{smoothie_name}')"
         
-        #st.write(my_insert_stmt)
-        
     time_to_insert = st.button('Submit Order')
     
     if time_to_insert:
+        st.write(my_insert_stmt)
         session.sql(my_insert_stmt).collect()
         st.success(f'Your Smoothie is ordered! {smoothie_name}', icon="✅")
 
